@@ -5,12 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "enderecos")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 @Access(AccessType.FIELD)
 public class EnderecoModel {
 
@@ -34,4 +29,53 @@ public class EnderecoModel {
     @ManyToOne
     @JoinColumn(name = "cli_id", nullable = false)
     private ClienteModel cliente;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getLogradouro() {
+		return logradouro;
+	}
+
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public ClienteModel getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(ClienteModel cliente) {
+		this.cliente = cliente;
+	}
+
 }

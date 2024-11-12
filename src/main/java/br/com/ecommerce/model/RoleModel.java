@@ -5,12 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 @Access(AccessType.FIELD)
 public class RoleModel {
 
@@ -21,4 +16,21 @@ public class RoleModel {
 
     @Column(name = "rol_nome", nullable = false, unique = true)
     private String nome;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 }
