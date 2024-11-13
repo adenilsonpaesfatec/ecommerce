@@ -22,14 +22,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDTO salvar(UsuarioDTO usuarioDTO) {
-        UsuarioModel usuarioModel = usuarioMapper.toUsuarioModel(usuarioDTO);
-        UsuarioModel savedUsuario = usuarioRepository.save(usuarioModel);
+        UsuarioModel usuarioModel = usuarioMapper
+        		.toUsuarioModel(usuarioDTO);
+        UsuarioModel savedUsuario = usuarioRepository
+        		.save(usuarioModel);
         return usuarioMapper.toUsuarioDTO(savedUsuario);
     }
 
     @Override
     public Optional<UsuarioDTO> buscarPorId(Long id) {
-        return usuarioRepository.findById(id).map(usuarioMapper::toUsuarioDTO);
+        return usuarioRepository
+        		.findById(id)
+        		.map(usuarioMapper::toUsuarioDTO);
     }
 
     @Override
@@ -41,6 +45,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void deletarPorId(Long id) {
-        usuarioRepository.deleteById(id);
+        usuarioRepository
+        .deleteById(id);
     }
 }

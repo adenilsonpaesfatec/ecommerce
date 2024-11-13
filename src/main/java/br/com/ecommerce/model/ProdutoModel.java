@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "produtos")
 @Data
@@ -31,6 +33,7 @@ public class ProdutoModel {
 
     @ManyToOne
     @JoinColumn(name = "cat_id", nullable = false)
+    @JsonIgnore
     private CategoriaModel categoria;
 
 }
