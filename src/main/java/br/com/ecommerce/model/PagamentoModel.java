@@ -8,6 +8,8 @@ import java.util.Date;
 @Entity
 @Table(name = "pagamentos")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Access(AccessType.FIELD)
 public class PagamentoModel {
 
@@ -29,45 +31,5 @@ public class PagamentoModel {
     @OneToOne
     @JoinColumn(name = "ped_id", nullable = false)
     private PedidoModel pedido;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public BigDecimal getValor() {
-		return valor;
-	}
-
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public PedidoModel getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(PedidoModel pedido) {
-		this.pedido = pedido;
-	}
 
 }

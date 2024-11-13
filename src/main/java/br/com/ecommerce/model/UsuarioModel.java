@@ -1,11 +1,14 @@
 package br.com.ecommerce.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
 @Table(name = "usuarios")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Access(AccessType.FIELD)
 public class UsuarioModel {
 
@@ -15,45 +18,18 @@ public class UsuarioModel {
     private Long id;
 
     @Column(name = "usr_email", nullable = false, unique = true)
+    @NotNull(message = "O campo 'email' é obrigatório")
+    @Email(message = "O campo 'email' deve conter um endereço de e-mail válido")
+    @Size(max = 100, message = "O campo 'email' pode ter no máximo 100 caracteres")
     private String email;
 
     @Column(name = "usr_senha", nullable = false)
+    @NotNull(message = "O campo 'senha' é obrigatório")
+    @Size(min = 6, max = 20, message = "O campo 'senha' deve ter entre 6 e 20 caracteres")
     private String senha;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rol_id", nullable = false)
     private RoleModel role;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public RoleModel getRole() {
-		return role;
-	}
-
-	public void setRole(RoleModel role) {
-		this.role = role;
-	}
 
 }

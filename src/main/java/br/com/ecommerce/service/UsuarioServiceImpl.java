@@ -6,9 +6,10 @@ import br.com.ecommerce.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import br.com.ecommerce.mapper.UsuarioMapper;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -16,43 +17,30 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     @Override
     public UsuarioDTO salvar(UsuarioDTO usuarioDTO) {
-        UsuarioModel usuarioModel = toUsuarioModel(usuarioDTO);
+        UsuarioModel usuarioModel = usuarioMapper.toUsuarioModel(usuarioDTO);
         UsuarioModel savedUsuario = usuarioRepository.save(usuarioModel);
-        return toUsuarioDTO(savedUsuario);
+        return usuarioMapper.toUsuarioDTO(savedUsuario);
     }
 
     @Override
     public Optional<UsuarioDTO> buscarPorId(Long id) {
-        return usuarioRepository.findById(id).map(this::toUsuarioDTO);
+        return usuarioRepository.findById(id).map(usuarioMapper::toUsuarioDTO);
     }
 
     @Override
     public List<UsuarioDTO> listarTodos() {
         return usuarioRepository.findAll().stream()
-                .map(this::toUsuarioDTO)
+                .map(usuarioMapper::toUsuarioDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deletarPorId(Long id) {
         usuarioRepository.deleteById(id);
-    }
-
-    private UsuarioDTO toUsuarioDTO(UsuarioModel usuario) {
-        UsuarioDTO dto = new UsuarioDTO();
-        dto.setId(usuario.getId());
-        dto.setEmail(usuario.getEmail());
-        // Mapear outros campos conforme necessário
-        return dto;
-    }
-
-    private UsuarioModel toUsuarioModel(UsuarioDTO dto) {
-        UsuarioModel usuario = new UsuarioModel();
-        usuario.setId(dto.getId());
-        usuario.setEmail(dto.getEmail());
-        // Mapear outros campos conforme necessário
-        return usuario;
     }
 }

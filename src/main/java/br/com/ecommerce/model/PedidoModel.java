@@ -8,6 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "pedidos")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Access(AccessType.FIELD)
 public class PedidoModel {
 
@@ -29,45 +31,5 @@ public class PedidoModel {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedidoModel> itens;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public ClienteModel getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(ClienteModel cliente) {
-		this.cliente = cliente;
-	}
-
-	public List<ItemPedidoModel> getItens() {
-		return itens;
-	}
-
-	public void setItens(List<ItemPedidoModel> itens) {
-		this.itens = itens;
-	}
 
 }

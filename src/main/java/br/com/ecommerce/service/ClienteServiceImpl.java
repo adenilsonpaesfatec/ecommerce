@@ -1,6 +1,7 @@
 package br.com.ecommerce.service;
 
 import br.com.ecommerce.dto.ClienteDTO;
+import br.com.ecommerce.mapper.ClienteMapper;
 import br.com.ecommerce.model.ClienteModel;
 import br.com.ecommerce.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,44 +16,31 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+    
+    @Autowired
+    private ClienteMapper clienteMapper;
 
     @Override
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
-        ClienteModel clienteModel = toClienteModel(clienteDTO);
+        ClienteModel clienteModel = clienteMapper.toClienteModel(clienteDTO);
         ClienteModel savedCliente = clienteRepository.save(clienteModel);
-        return toClienteDTO(savedCliente);
+        return clienteMapper.toClienteDTO(savedCliente);
     }
 
     @Override
     public Optional<ClienteDTO> buscarPorId(Long id) {
-        return clienteRepository.findById(id).map(this::toClienteDTO);
+        return clienteRepository.findById(id).map(clienteMapper::toClienteDTO);
     }
 
     @Override
     public List<ClienteDTO> listarTodos() {
-        return clienteRepository.findAll().stream().map(this::toClienteDTO).collect(Collectors.toList());
+        return clienteRepository.findAll().stream()
+        		.map(clienteMapper::toClienteDTO)
+        		.collect(Collectors.toList());
     }
 
     @Override
     public void deletarPorId(Long id) {
         clienteRepository.deleteById(id);
-    }
-
-    private ClienteDTO toClienteDTO(ClienteModel cliente) {
-        ClienteDTO dto = new ClienteDTO();
-        dto.setId(cliente.getId());
-        dto.setNome(cliente.getNome());
-        dto.setTelefone(cliente.getTelefone());
-        // Conversão de usuário para DTO
-        return dto;
-    }
-
-    private ClienteModel toClienteModel(ClienteDTO dto) {
-        ClienteModel cliente = new ClienteModel();
-        cliente.setId(dto.getId());
-        cliente.setNome(dto.getNome());
-        cliente.setTelefone(dto.getTelefone());
-        // Conversão do usuário do DTO para o modelo, se necessário
-        return cliente;
     }
 }

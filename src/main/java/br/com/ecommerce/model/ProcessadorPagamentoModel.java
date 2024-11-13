@@ -6,6 +6,8 @@ import lombok.*;
 @Entity
 @Table(name = "processadores_pagamento")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Access(AccessType.FIELD)
 public class ProcessadorPagamentoModel {
 
@@ -19,29 +21,5 @@ public class ProcessadorPagamentoModel {
 
     @Column(name = "ppg_configuracoes")
     private String configuracoes;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getConfiguracoes() {
-		return configuracoes;
-	}
-
-	public void setConfiguracoes(String configuracoes) {
-		this.configuracoes = configuracoes;
-	}
 
 }
