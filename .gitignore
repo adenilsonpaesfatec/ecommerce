@@ -1,33 +1,102 @@
-HELP.md
+# Compilação e build
 target/
+bin/
+
+# Arquivos temporários de compilação
+*.class
+*.jar
+*.war
+*.ear
+
+# Configurações do Maven
+.mvn/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
+# Logs
+logs/
+*.log
+
+# Diretório de arquivos temporários do sistema
+tmp/
+
+# Configurações do Spring Tool Suite (STS)
 .springBeans
-.sts4-cache
+.apt_generated/
+.factorypath
+.settings/
+.classpath
+.project
+.loadpath
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Arquivos de configuração do IntelliJ IDEA (caso use simultaneamente)
+.idea/
 *.iml
-*.ipr
+*.iws
+out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Arquivos de configuração do Eclipse (caso use simultaneamente)
+.metadata/
+*.checkstyle
+*.launch
+*.jardesc
+*.mylyn/
+*.overrides
+*.prefs
 
-### VS Code ###
-.vscode/
+# Configurações e cache do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos gerados automaticamente pelo sistema operacional
+*~
+*.swp
+
+# Cache do Maven
+.m2/
+
+# Arquivos de configuração do Java
+*.env
+.env
+*.properties
+*.yml
+*.yaml
+bootstrap.yml
+bootstrap.yaml
+
+# Arquivos de teste (cobertura de código)
+jacoco.exec
+*.ec
+
+# Banco de dados embutido
+h2.db
+*.mv.db
+*.h2.db
+*.trace.db
+
+# Arquivos de configuração de contêineres
+docker-compose.yml
+Dockerfile
+.env.docker
+docker-compose.override.yml
+.idea/
+
+# Outros arquivos que podem ser ignorados dependendo do projeto
+*.tmp
+*.bak
+*.old
+*.swp
+*.swo
+
+# Arquivos de chaves e credenciais
+*.pem
+*.key
+*.crt
+*.p12
+*.cer
+*.der
