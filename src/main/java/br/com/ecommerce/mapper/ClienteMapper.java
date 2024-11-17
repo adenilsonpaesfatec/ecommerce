@@ -10,9 +10,9 @@ import br.com.ecommerce.model.ClienteModel;
 @Mapper(componentModel = "spring")
 public interface ClienteMapper {
     
-    @Mapping(source = "usuario", target = "usuario") // Mapeia o campo role usando a relação
+    @Mapping(source = "usuario", target = "usuario")
     ClienteDTO toClienteDTO(ClienteModel clienteModel);
     
-    @Mapping(source = "usuario", target = "usuario") // Mapeia o campo role usando a relação
+    @Mapping(source = "usuario", target = "usuario")
     ClienteModel toClienteModel(ClienteDTO clienteDTO);
 }

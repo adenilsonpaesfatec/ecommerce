@@ -1,10 +1,8 @@
 package br.com.ecommerce.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import lombok.*;
+import br.com.ecommerce.model.ClienteModel;
+import jakarta.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -28,4 +26,7 @@ public class EnderecoDTO {
     @NotNull(message = "O campo 'cep' é obrigatório")
     @Size(max = 10, message = "O campo 'cep' pode ter no máximo 10 caracteres")
     private String cep;
+
+    @NotNull(message = "O campo 'cliente' é obrigatório")
+    private ClienteModel cliente;
 }

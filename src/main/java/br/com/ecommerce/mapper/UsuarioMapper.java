@@ -8,9 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
     
-    @Mapping(source = "role", target = "role") // Mapeia o campo role usando a relação
+    @Mapping(source = "role", target = "role")
     UsuarioDTO toUsuarioDTO(UsuarioModel usuarioModel);
     
-    @Mapping(source = "role", target = "role") // Mapeia o campo role usando a relação
+    @Mapping(source = "role", target = "role")
     UsuarioModel toUsuarioModel(UsuarioDTO usuarioDTO);
 }

@@ -8,12 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ItemPedidoMapper {
     
-    @Mapping(source = "pedido", target = "pedido") // Mapeia o campo role usando a relação
-    @Mapping(source = "produto", target = "produto") // Mapeia o campo role usando a relação
-    ItemPedidoDTO toItemPedidoDTO(ItemPedidoModel ItemPedidoModel);
+    @Mapping(source = "pedido", target = "pedido")
+    @Mapping(source = "produto", target = "produto")
+    ItemPedidoDTO toItemPedidoDTO(ItemPedidoModel itemPedidoModel);
     
-    @Mapping(source = "pedido", target = "pedido") // Mapeia o campo role usando a relação
-    @Mapping(source = "produto", target = "produto") // Mapeia o campo role usando a relação
-    ItemPedidoModel toItemPedidoModel(ItemPedidoDTO ItemPedidoDTO);
+    @Mapping(source = "pedido", target = "pedido")
+    @Mapping(source = "produto", target = "produto")
+    ItemPedidoModel toItemPedidoModel(ItemPedidoDTO itemPedidoDTO);
     
 }
