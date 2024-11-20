@@ -5,13 +5,16 @@ import br.com.ecommerce.service.ProcessadorPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/processadores-pagamento")
+@Validated
 public class ProcessadorPagamentoController {
 
     @Autowired
@@ -19,38 +22,54 @@ public class ProcessadorPagamentoController {
 
     @GetMapping
     public ResponseEntity<List<ProcessadorPagamentoDTO>> listarTodos() {
-        List<ProcessadorPagamentoDTO> processadoresPagamento = processadorPagamentoService.listarTodos();
-        return ResponseEntity.ok(processadoresPagamento);
+        List<ProcessadorPagamentoDTO> processadoresPagamento = processadorPagamentoService
+        		.listarTodos();
+        return ResponseEntity
+        		.ok(processadoresPagamento);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProcessadorPagamentoDTO> buscarPorId(@PathVariable Long id) {
-        Optional<ProcessadorPagamentoDTO> processadorPagamento = processadorPagamentoService.buscarPorId(id);
-        return processadorPagamento.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return processadorPagamentoService
+        		.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Processador de pagamento não encontrado"));
     }
 
     @PostMapping
-    public ResponseEntity<ProcessadorPagamentoDTO> criar(@RequestBody ProcessadorPagamentoDTO processadorPagamentoDTO) {
-        ProcessadorPagamentoDTO novoProcessadorPagamento = processadorPagamentoService.salvar(processadorPagamentoDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoProcessadorPagamento);
+    public ResponseEntity<ProcessadorPagamentoDTO> criar(@Valid @RequestBody ProcessadorPagamentoDTO processadorPagamentoDTO) {
+        ProcessadorPagamentoDTO novoProcessadorPagamento = processadorPagamentoService
+        		.salvar(processadorPagamentoDTO);
+        return ResponseEntity
+        		.status(HttpStatus
+        				.CREATED)
+        		.body(novoProcessadorPagamento);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProcessadorPagamentoDTO> atualizar(@PathVariable Long id, @RequestBody ProcessadorPagamentoDTO processadorPagamentoDTO) {
-        if (!processadorPagamentoService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ProcessadorPagamentoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProcessadorPagamentoDTO processadorPagamentoDTO) {
+        processadorPagamentoService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Processador de pagamento não encontrado"));
         processadorPagamentoDTO.setId(id);
-        ProcessadorPagamentoDTO processadorPagamentoAtualizado = processadorPagamentoService.salvar(processadorPagamentoDTO);
-        return ResponseEntity.ok(processadorPagamentoAtualizado);
+        ProcessadorPagamentoDTO processadorPagamentoAtualizado = processadorPagamentoService
+        		.salvar(processadorPagamentoDTO);
+        return ResponseEntity
+        		.ok(processadorPagamentoAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!processadorPagamentoService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        processadorPagamentoService.deletarPorId(id);
-        return ResponseEntity.noContent().build();
+        processadorPagamentoService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Processador de pagamento não encontrado"));
+        processadorPagamentoService
+        .deletarPorId(id);
+        return ResponseEntity
+        		.noContent()
+        		.build();
     }
 }

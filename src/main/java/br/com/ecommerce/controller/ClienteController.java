@@ -5,13 +5,16 @@ import br.com.ecommerce.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/clientes")
+@Validated
 public class ClienteController {
 
     @Autowired
@@ -19,38 +22,53 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> listarTodos() {
-        List<ClienteDTO> clientes = clienteService.listarTodos();
-        return ResponseEntity.ok(clientes);
+        List<ClienteDTO> clientes = clienteService
+        		.listarTodos();
+        return ResponseEntity
+        		.ok(clientes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
-        Optional<ClienteDTO> cliente = clienteService.buscarPorId(id);
-        return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return clienteService
+        		.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Cliente não encontrado"));
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> criar(@RequestBody ClienteDTO clienteDTO) {
-        ClienteDTO novoCliente = clienteService.salvar(clienteDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoCliente);
+    public ResponseEntity<ClienteDTO> criar(@Valid @RequestBody ClienteDTO clienteDTO) {
+        ClienteDTO novoCliente = clienteService
+        		.salvar(clienteDTO);
+        return ResponseEntity
+        		.status(HttpStatus
+        				.CREATED).body(novoCliente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
-        if (!clienteService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        clienteDTO.setId(id);
-        ClienteDTO clienteAtualizado = clienteService.salvar(clienteDTO);
-        return ResponseEntity.ok(clienteAtualizado);
+    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ClienteDTO clienteDTO) {
+        clienteService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Cliente não encontrado"));
+        clienteDTO
+        .setId(id);
+        ClienteDTO clienteAtualizado = clienteService
+        		.salvar(clienteDTO);
+        return ResponseEntity
+        		.ok(clienteAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!clienteService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+        clienteService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Cliente não encontrado"));
         clienteService.deletarPorId(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+        		.noContent()
+        		.build();
     }
 }

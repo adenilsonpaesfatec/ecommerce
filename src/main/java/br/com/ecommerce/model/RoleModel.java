@@ -17,8 +17,9 @@ public class RoleModel {
     @Column(name = "rol_id")
     private Long id;
 
-    @Column(name = "rol_nome", nullable = false, unique = true)
     @NotNull(message = "O campo 'nome' é obrigatório")
+    @Size(min = 3, max = 50, message = "O campo 'nome' deve ter entre 3 e 50 caracteres")
+    @Column(name = "rol_nome", nullable = false, unique = true)
     private String nome;
 
 }

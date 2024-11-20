@@ -5,13 +5,16 @@ import br.com.ecommerce.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/produtos")
+@Validated
 public class ProdutoController {
 
     @Autowired
@@ -19,38 +22,55 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<ProdutoDTO>> listarTodos() {
-        List<ProdutoDTO> produtos = produtoService.listarTodos();
-        return ResponseEntity.ok(produtos);
+        List<ProdutoDTO> produtos = produtoService
+        		.listarTodos();
+        return ResponseEntity
+        		.ok(produtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDTO> buscarPorId(@PathVariable Long id) {
-        Optional<ProdutoDTO> produto = produtoService.buscarPorId(id);
-        return produto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return produtoService
+        		.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Produto não encontrado"));
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDTO> criar(@RequestBody ProdutoDTO produtoDTO) {
-        ProdutoDTO novoProduto = produtoService.salvar(produtoDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoProduto);
+    public ResponseEntity<ProdutoDTO> criar(@Valid @RequestBody ProdutoDTO produtoDTO) {
+        ProdutoDTO novoProduto = produtoService
+        		.salvar(produtoDTO);
+        return ResponseEntity
+        		.status(HttpStatus
+        				.CREATED)
+        		.body(novoProduto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
-        if (!produtoService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        produtoDTO.setId(id);
-        ProdutoDTO produtoAtualizado = produtoService.salvar(produtoDTO);
-        return ResponseEntity.ok(produtoAtualizado);
+    public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProdutoDTO produtoDTO) {
+        produtoService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Produto não encontrado"));
+        produtoDTO
+        .setId(id);
+        ProdutoDTO produtoAtualizado = produtoService
+        		.salvar(produtoDTO);
+        return ResponseEntity
+        		.ok(produtoAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!produtoService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        produtoService.deletarPorId(id);
-        return ResponseEntity.noContent().build();
+        produtoService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Produto não encontrado"));
+        produtoService
+        .deletarPorId(id);
+        return ResponseEntity
+        		.noContent()
+        		.build();
     }
 }

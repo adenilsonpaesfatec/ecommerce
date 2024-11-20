@@ -5,13 +5,16 @@ import br.com.ecommerce.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categorias")
+@Validated
 public class CategoriaController {
 
     @Autowired
@@ -19,38 +22,53 @@ public class CategoriaController {
 
     @GetMapping
     public ResponseEntity<List<CategoriaDTO>> listarTodos() {
-        List<CategoriaDTO> categorias = categoriaService.listarTodos();
-        return ResponseEntity.ok(categorias);
+        List<CategoriaDTO> categorias = categoriaService
+        		.listarTodos();
+        return ResponseEntity
+        		.ok(categorias);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaDTO> buscarPorId(@PathVariable Long id) {
-        Optional<CategoriaDTO> categoria = categoriaService.buscarPorId(id);
-        return categoria.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return categoriaService
+        		.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Categoria não encontrada"));
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> criar(@RequestBody CategoriaDTO categoriaDTO) {
-        CategoriaDTO novaCategoria = categoriaService.salvar(categoriaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
+    public ResponseEntity<CategoriaDTO> criar(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+        CategoriaDTO novaCategoria = categoriaService
+        		.salvar(categoriaDTO);
+        return ResponseEntity
+        		.status(HttpStatus
+        				.CREATED)
+        		.body(novaCategoria);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaDTO categoriaDTO) {
-        if (!categoriaService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<CategoriaDTO> atualizar(@PathVariable Long id, @Valid @RequestBody CategoriaDTO categoriaDTO) {
+        categoriaService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Categoria não encontrada"));
         categoriaDTO.setId(id);
-        CategoriaDTO categoriaAtualizada = categoriaService.salvar(categoriaDTO);
-        return ResponseEntity.ok(categoriaAtualizada);
+        CategoriaDTO categoriaAtualizada = categoriaService
+        		.salvar(categoriaDTO);
+        return ResponseEntity
+        		.ok(categoriaAtualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!categoriaService.buscarPorId(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
+        categoriaService
+        .buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus
+                		.NOT_FOUND, "Categoria não encontrada"));
         categoriaService.deletarPorId(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+        		.noContent()
+        		.build();
     }
 }
